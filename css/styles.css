@@ -1,0 +1,258 @@
+/* Styles written by Rich Donohue for New Maps Plus and Floating Sheep */
+@import url(http://fonts.googleapis.com/css?family=Lato);
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400);
+body {
+    margin: 0;
+    padding: 0;
+    background: whitesmoke;
+    font-family: 'Lato', sans-serif;
+    color: #202020;
+}
+h1 {
+    font-family: 'Montserrat', serif;
+    position: absolute;
+    z-index: 200;
+    color: #f0f9e8;
+    letter-spacing: .16em;
+    font-size: 2.5em;
+    font-weight: 400;
+    top: -15px;
+    left: 80px;
+    text-shadow: 2px 2px 0 #282828, 4px 4px 0 #43a2ca;
+    display: inline-block;
+    float: left;
+}
+h1 img {
+    position: absolute;
+    top: 10px;
+    left: -70px;
+}
+h2 {
+    font-family: 'Montserrat', serif;
+    position: absolute;
+    top: 45px;
+    left: 20px;
+    z-index: 200;
+    max-width: 40%;
+    color: #f0f9e8;
+    font-size: 1.3em;
+    font-weight: 400;
+    font-variant: small-caps;
+    display: inline-block;
+}
+#huh {
+    position: absolute;
+    top: 65px;
+    left: 95px;
+    padding: 3px 6px;
+    z-index: 300;
+    color: #f0f9e8;
+    font-size: 1.2em;
+    background-color:rgba(40,40,40,0.8);
+    border: 1px grey solid; 
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.5s ease;
+    transition: color 0.5s ease;
+}
+#huh:hover {
+   background-color:rgba(255,255,255,0.8); 
+   color: #202020;
+}
+h3 {
+    font-size: 1.1em;   
+}
+#about {
+    position: absolute;
+    z-index: 400;
+    width: 65%;
+    left: 15%;
+    top: 15%;
+    background-color:rgba(40,40,40,0.95);
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: 1px grey solid;
+    color: whitesmoke;
+    display: none;
+}
+#about > div {
+    width: 60%;
+    float: left;
+    border-right: 1px solid #d4d4d4;
+    margin-right: 25px;
+    padding-right: 25px;
+}
+#about h3, #about h4 {
+    font-variant: small-caps;
+    font-size: 1.6em;
+    margin: 8px auto 10px;
+}
+#about h4 {
+    font-size: 1.2em;   
+}
+#about p, #about li {
+    color: whitesmoke;
+    font-size: .9em;
+    margin: 0 0 10px;
+    line-height: 1.4em;
+}
+#about li {
+    list-style-type: none;
+    margin-bottom: .6em;
+}
+#about a {
+    color: #48a3c8;
+}
+b {
+    font-weight: bold;
+}
+#map { 
+    position:absolute; 
+    top:0; 
+    bottom:0; 
+    width:100%; 
+    z-index: 100;
+    background: #202020;
+}
+#cover {
+    position:absolute; 
+    top:0; 
+    bottom:0; 
+    width:100%; 
+    z-index: 300;
+    background: #202020;
+    opacity: .7;
+    display: none;
+}
+button {
+    padding: 0 6px;   
+}
+p {
+    font-size: 1em;
+    color: #001323;
+}
+.hexbin-hexagon {
+    stroke: #000;
+    stroke-width: 1px;
+}
+#ui {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    z-index: 200;
+    background-color:rgba(40,40,40,0.8);
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: 1px grey solid;
+    transition: right .5s;
+    display: none; /* initially hide until populated */
+}
+#ui.open{
+    right: 15px;
+}
+#ui label {
+    color: white;  
+    float: right;
+    font-size: .9em;
+}
+#ui select {
+    margin: 6px 0;
+    float: right;
+    font-size: 1.1em;
+}
+#brew, #normalize {
+    font-size: .9em;   
+}
+.legend {
+    display: none;   /* initially hide for fadeIn */
+    max-width: 180px;
+}
+.legend, .stats {
+    font-family: 'Lato', serif;
+    padding: 6px 8px;
+    font-size: 1em;
+    color: whitesmoke;
+    background-color:rgba(40,40,40,0.8);
+    padding: 8px 15px;
+    border-radius: 4px;
+    border: 1px grey solid;
+}
+.stats {
+    position: absolute;
+    z-index: 200;
+    width:auto;
+}
+.stats h3 {
+    padding: 0;
+    margin: 6px 0 0;
+}
+.stats ul, .cities ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+}
+.cities {
+    bottom: 15px;
+    right: 15px;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+.legend h3 {
+    font-size: 1.2em;
+    font-weight: 400;
+    line-height: 1.4em;
+    color: whitesmoke;
+    margin: 0;
+    max-width: 180px;
+}
+.legend ul {
+    padding: 0;
+}
+.legend li {
+    list-style-type: none;
+    margin: 6px 0;
+}
+.legend ul span {
+    width: 30px;
+    height: 20px;
+    float: left;
+    margin-right: 10px;
+}
+#branding {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 200;
+}
+#sheep {
+    opacity: .6;
+}
+#mobile-apology {
+    position:absolute; 
+    top:0; 
+    bottom:0; 
+    width:100%; 
+    z-index: 100;
+    background: whitesmoke;
+    padding: 20% 0 0;
+    font-size: 1em;
+    display: none;   
+}
+#mobile-apology p {
+    color: #545252;    
+    width: 70%;
+    margin: 0 auto 15px;
+}
+
+/* ----------- detect smaller phones and handhelds and disable ----------- */
+
+/* Portrait and Landscape */
+@media only screen 
+  and (min-device-width: 0px) 
+  and (max-device-width: 520px) {
+      #mobile-apology {
+        display: block;
+        z-index: 500;
+      }
+}
+
