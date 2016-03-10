@@ -1,5 +1,5 @@
 /*
-    JavaScript written by Rich Donohue (@rgdonohue) for Beer Tweets Map (July 2015)
+    JavaScript written by Rich Donohue (@rgdonohue) for NCAA March Madness Fandom Map (March 2016)
     in Colloboration with Ate Poorthuis and Matt Zook
     for New Maps Plus and Floating Sheep
     Creative Commons Attribution-Noncommercial-Share Alike 3.0 Unported License.
@@ -51,7 +51,7 @@ L.graticule({
 
 // initial global variables
 var selectedAtt, 
-    normAtt = 'rn0to10000', 
+    normAtt = 'random', 
     normalized = 'norm',
     hexgrid,
     stats,
@@ -66,144 +66,84 @@ var selectedAtt,
         compare: ['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#d7191c'],
         compareLabels: ['highly likely','likely','about average','likely','highly likely']
     },
-    displayNames = {
-        ale: 'ale',
-        amberandale: 'amber and ale',
-        amstel: 'Amstel',
-        beerandlightorlite: 'light or lite',
-        beer: 'beer',
-        belgianandale: 'belgian ale',
-        bluemoon: 'Blue Moon',
-        brooklynandlager: 'Brooklyn Lager',
-        budorbudweiserandlightorlite: 'Budwieser (Bud) Light',
-        budorbudweiser: 'Budweiser (Bud)',
-        chimay: 'Chimay',
-        coorsandlightorlite: 'Coors Light',
-        coors: 'Coors',
-        corona: 'Corona',
-        dogfish: 'Dogfish',
-        dosequis: 'Dos Equis',
-        duvel: 'Duvel',
-        fattire: 'Fat Tire',
-        gooseisland: 'Goose Island',
-        gose: 'Gose',
-        grainbelt: 'Grain Belt',
-        grolsch: 'Grolsch',
-        guinness: 'Guinness',
-        hefeweizen: 'Hefeweizen',
-        heineken: 'Heineken',
-        ipaorindiaandpaleandale: 'India Pale Ale (IPA)',
-        lager: 'lager',
-        leinenkugel: 'Leinenkugel',
-        magichat: 'Magic Hat',
-        millerandlightorlite: 'Miller Lite (Light)',
-        miller: 'miller',
-        modeloandbeerorespecial: 'Modelo Especial',
-        naturallight: 'Natural Light',
-        oktoberfest: 'Oktoberfest',
-        ommegang: 'Ommegang',
-        pabstblueribbonorpbr: 'Pabst Blue Ribbon (PBR)',
-        paleandale: 'Pale Ale',
-        pils: 'Pils',
-        porter: 'porter',
-        pumpkinandale: 'pumkin ale',
-        redandale: 'red ale',
-        saisonorfarmhouseandale: 'Saison Farmhouse Ale',
-        samadams: 'Sam Adams',
-        shinerbock: 'Shiner Bock',
-        sierranevadaandaleoripa: 'Sierra Nevada',
-        stellaandbeerorartois: 'Stella Artois',
-        stout: 'stout',
-        tribel: 'tribel', // typo in data pull, should be tripel
-        weissbier: 'Weissbier',
-        westvleteren: 'Westvleteren',
-        wheatandale: 'wheat ale',
-        witbier: 'Witbier',
-        yuengling: 'Yuengling'    
-    },
+    displayNames = {},
     sumData;
 
-// load all our data using JQuery's AJAX requests
-var data = {};
-
-//$.when(
-//      $.getJSON("data/land.json", function(land) {
-//        // draw the land layer so user can see a map while data loads
-//        L.geoJson(land, {
-//            style: function(feature) {
-//                return {                
-//                    stroke: false,
-//                    fill: true,
-//                    color: '#313030',
-//                    weight: 1,
-//                    fillOpacity: 1
-//                }
-//            }
-//        }).addTo(map);
-//      }),
-//      $.getJSON("data/states.json", function(states) {
-//         data.states =  states;
-//      }),
-//      $.getJSON("data/hexgrid.json", function(hexgrids) {
-//         data.hexgrids =  hexgrids;
-//      })
-//).then(function() {
-//      ready(data.hexgrids, data.states)
-//});
 
 d3.queue()
     .defer(d3.json, 'data/hexgrid.json')
     .defer(d3.csv, 'data/hex-dt.csv')
     .defer(d3.csv, 'data/key-count-all.csv')
-    .await(boom);
+    .defer(d3.json, 'data/states.json')
+    .defer(d3.json, 'data/land.json')
+    .await(processData);
 
-function boom(e,hex,data,key) {
-    console.log(data);
-    for(var i = 0; i < key.length; i++) {
-       var original = key[i]['original '];
-        console.log('here i am baby', original);
-        for (var j = 0; j < data.length; j++) {
-            for(var n in data[j]) {
-                console.log(data[j]);
-                break;
-            }
-            break;
+function processData(e,hex,data,keys,states,land) {
+    
+    for(var i = 0; i < hex.features.length; i++){
+        var hexId = hex.features[i].properties.hex;
+        hex.features[i].properties.tweets = {};
+        for(var j = 0; j < data.length; j++) {
+           if(data[j].hex === hexId){
+               hex.features[i].properties.tweets = data[j];
+           }   
+        } 
+        //console.log(hex.features[i].properties.tweets)
+        for(var k = 0; k < keys.length; k++) {
+            var original = keys[k]['original '],
+                schoolName = keys[k]['School Name'];
+            
+            hex.features[i].properties.tweets[schoolName] = Number(hex.features[i].properties.tweets[original]);
+            
+            hex.features[i].properties.tweets.random = 
+                Number(hex.features[i].properties.tweets.random);
+
+            delete hex.features[i].properties.tweets[original];
+            displayNames[schoolName] = schoolName;
         }
-    }    
-//    for(var i = 0; i < hex.features.length; i++) {
-//        console.log(hex.features[i].properties.hex.split('ID')[1]);
-//    }
+    }
+    
+    playBall(hex, states, land);
+    
 }
 
 
 
 
-function ready(data, states) {
+function playBall(hex, states, land) {
     
     // store this selection as we make it frequently
     stats = $(".stats").hide();   
 
     // set initial map view with 'beer' variable
-    selectedAtt =  'beer';
-    $("#brew").val('beer')
+    selectedAtt =  'Kentucky';
+    $("#team").val('Kentucky')
 
     // create a new object from data to hold summed values for normalizing
-    sumData = JSON.parse(JSON.stringify(data.features[0].properties));
-
+    sumData = JSON.parse(JSON.stringify(hex.features[0].properties.tweets));
+   
+//    delete sumData[hex];
+//    delete sumData.random;
+//    delete sumData.total;
+//    delete sumData.tweets;
+   
     // then ensure that all property values are zero
     for (var key in sumData) {
         sumData[key] = 0;   
     }
-
+    
     // then loop through data and aggregate totals for each property
-    data.features.forEach(function(f) {
-       for(var p in f.properties) {
-           sumData[p]+=f.properties[p]
+    hex.features.forEach(function(f) {
+       for(var p in f.properties.tweets) {
+           if(p != 'total' && p != 'hex') {
+               sumData[p]+=f.properties.tweets[p]
+           }
        }   
     });
-
+    console.log(sumData);
+    
     // draw initial geometries layer 
-    hexgrid = L.geoJson(data, {
+    hexgrid = L.geoJson(hex, {
         style: function(feature) {
             return {                
                 stroke: true,
@@ -215,47 +155,49 @@ function ready(data, states) {
             }
         },
         filter: function(feature) {
+            
               // don't create the polygons with no data
               for(var prop in feature.properties){
-                  if(feature.properties[prop] > 0) {
+                  if(Number(feature.properties[prop].total) > 0) {
                     return feature;   
                   }
               }         
-        },
-        onEachFeature: function(feature,layer){
-            // for each hex, determine the top 10 beers tweeted
-            // and display on a mouseover event
-            
-            layer.on('mouseover', function() {                          
-
-                var props = layer.feature.properties;
-
-                // create an array of all beer tweets in that hexbin
-                var sortArray = []
-                for (var beer in props ) {
-                    var val = props[beer]; 
-                    if(beer != normAtt) {
-                        sortArray.push({'beer': beer, 'val': val});
-                    }
-                }
-                
-                // sort that array high to low
-                sortArray = sortArray.sort(function (a, b) {
-                    return b.val - a.val;
-                });
-
-                // build html to display in info window
-                var html = '<h3>Top 10 Beer Tweets</h3><ul>';
-                for(var i=0; i < 10; i++) {
-                    html+='<li>'+(i+1)+": "+displayNames[sortArray[i].beer]+'</li>';   
-                }
-                html+='</ul>';  
-                
-                // populate stats info window with 10 ten for this hex
-                stats.html(html);
-            });     
-
         }
+//        ,
+//        onEachFeature: function(feature,layer){
+//            // for each hex, determine the top 10 beers tweeted
+//            // and display on a mouseover event
+//            
+//            layer.on('mouseover', function() {                          
+//
+//                var props = layer.feature.properties;
+//
+//                // create an array of all beer tweets in that hexbin
+//                var sortArray = []
+//                for (var beer in props ) {
+//                    var val = props[beer]; 
+//                    if(beer != normAtt) {
+//                        sortArray.push({'beer': beer, 'val': val});
+//                    }
+//                }
+//                
+//                // sort that array high to low
+//                sortArray = sortArray.sort(function (a, b) {
+//                    return b.val - a.val;
+//                });
+//
+//                // build html to display in info window
+//                var html = '<h3>Top 10 Beer Tweets</h3><ul>';
+//                for(var i=0; i < 10; i++) {
+//                    html+='<li>'+(i+1)+": "+displayNames[sortArray[i].beer]+'</li>';   
+//                }
+//                html+='</ul>';  
+//                
+//                // populate stats info window with 10 ten for this hex
+//                stats.html(html);
+//            });     
+//
+//        }
     }).addTo(map);
 
     // draw states borders on top of our polygons
@@ -270,36 +212,37 @@ function ready(data, states) {
             }
         }
     }).addTo(map);
-    
+//    
     // get a list of the available property variables
-    var beerTypes = Object.keys(data.features[0].properties);
+    var teams = Object.keys(hex.features[0].properties);
 
-    // populate UI with beer type variables (using pretty display names)
-    buildUI(beerTypes);
+    // populate UI with team variables
+    buildUI(teams);
 
-   // initial call to symbolize map
+  //  initial call to symbolize map
    updateMap();
-
-    // create the legend
-    drawLegend();
+//
+//    // create the legend
+//    drawLegend();
 } // end ready
 
 function updateMap() {       
 
     hexgrid.eachLayer(function(layer) {
 
-        var props = layer.feature.properties;
-
+        var tweets = layer.feature.properties.tweets;
+        //console.log(tweets);
         // calculate a value for each hex based on the selected beer attribute
-        if(!props[normAtt]) props[normAtt] = 1
+        if(!tweets[normAtt]) { tweets[normAtt] = 1 }
 
         // fancy calculations to remove some of the noise at the extreme ends of the distribution
-        var odds = (props[selectedAtt]/sumData[selectedAtt])/(props[normAtt]/sumData[normAtt]);
-        var ciUpper = Math.exp(Math.log(odds)+1.96*Math.sqrt(1/props[selectedAtt]+1/sumData[selectedAtt]+1/props[normAtt]+1/sumData[normAtt])) 
-        var ciLower = Math.exp(Math.log(odds)-1.96*Math.sqrt(1/props[selectedAtt]+1/sumData[selectedAtt]+1/props[normAtt]+1/sumData[normAtt])) 
+        var odds = (tweets[selectedAtt]/sumData[selectedAtt])/(tweets[normAtt]/sumData[normAtt]);
+        console.log(sumData[normAtt]);
+        var ciUpper = Math.exp(Math.log(odds)+1.96*Math.sqrt(1/tweets[selectedAtt]+1/sumData[selectedAtt]+1/tweets[normAtt]+1/sumData[normAtt])) 
+        var ciLower = Math.exp(Math.log(odds)-1.96*Math.sqrt(1/tweets[selectedAtt]+1/sumData[selectedAtt]+1/tweets[normAtt]+1/sumData[normAtt])) 
         var ci = (ciUpper - ciLower) / odds
         var val = odds
-
+        
         if(val != 0 & ci < 8){ // cutoff based on very scientific method
             // color the hex value based upon the current data value 
             layer.setStyle({
@@ -324,6 +267,8 @@ function updateMap() {
 } 
 
 function getColor(val){
+    
+    console.log(val);
     
     // determine if normalizd by tweet pop or other beer
     if(normAtt == 'rn0to10000'){
