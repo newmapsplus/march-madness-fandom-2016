@@ -1,6 +1,5 @@
 /* Styles written by Rich Donohue for New Maps Plus and Floating Sheep */
 @import url(https://fonts.googleapis.com/css?family=Graduate);
-/*
 @font-face {
     font-family: 'sf_sports_nightregular';
     src: url('fonts/sfsportsnight-webfont.eot');
@@ -12,11 +11,6 @@
     font-weight: normal;
     font-style: normal;
 
-}
-*/
-@font-face {
-    font-family: 'SFSportsNight';
-    src: url('fonts/SFSportsNight.ttf');
 }
 @font-face {
     font-family: 'octin_sportsregular';
@@ -45,7 +39,7 @@ header {
     border-bottom: 2px solid #d1701a;
 }
 h1 {
-    font-family: 'SFSportsNight', Graduate, serif;
+    font-family: 'sf_sports_nightregular', Graduate, serif;
     position: absolute;
     z-index: 200;
     color: #005dab;
