@@ -43,30 +43,19 @@ var map = L.map('map', {
 L.graticule({
     interval: 5,
     style: {
-        color: '#d3d3d3',
+        color: 'white',
         opacity: .4,
         weight: 2
     }      
 }).addTo(map);
 
 // initial global variables
-var selectedAtt, 
-    normAtt = 'random', 
-    normalized = 'norm',
+var team1Att, 
+    team2Att = 'Duke',
     hexgrid,
     stats,
-    breaks = {
-        // breaks should be symmetrical 
-        norm: [2.5,1.25,.8,.4], // encoded high to low
-        compare: [2.5,1.25,.8,.4]
-    },
-    colorSchemes = {
-        norm: ['#045a8d','#2b8cbe','#74a9cf','#bdc9e1','#f1eef6'],
-        normLabels: ['highly likely','likely','about average','unlikely','highly unlikely'],
-        compare: ['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#d7191c'],
-        compareLabels: ['highly likely','likely','about average','likely','highly likely']
-    },
-    displayNames = {},
+    breaks = [2.5,1.25,.8,.4],
+    breakColors = ['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#d7191c'],
     sumData;
 
 
@@ -99,16 +88,12 @@ function processData(e,hex,data,keys,states,land) {
                 Number(hex.features[i].properties.tweets.random);
 
             delete hex.features[i].properties.tweets[original];
-            displayNames[schoolName] = schoolName;
+        
         }
     }
-    
     playBall(hex, states, land);
     
 }
-
-
-
 
 function playBall(hex, states, land) {
     
@@ -117,7 +102,7 @@ function playBall(hex, states, land) {
                 return {                
                     stroke: false,
                     fill: true,
-                    color: '#b4b4b4',
+                    color: '#f4f4f4',
                     weight: 1,
                     fillOpacity: 1
                 }
@@ -125,19 +110,14 @@ function playBall(hex, states, land) {
         }).addTo(map);
     
     // store this selection as we make it frequently
-    stats = $(".stats").hide();   
+    stats = $(".stats");   
 
     // set initial map view with 'beer' variable
-    selectedAtt =  'Kentucky';
-    $("#team").val('Kentucky')
+    team1Att =  'Kentucky';
+    $("#team-1").val('Kentucky')
 
     // create a new object from data to hold summed values for normalizing
     sumData = JSON.parse(JSON.stringify(hex.features[0].properties.tweets));
-   
-//    delete sumData[hex];
-//    delete sumData.random;
-//    delete sumData.total;
-//    delete sumData.tweets;
    
     // then ensure that all property values are zero
     for (var key in sumData) {
@@ -175,44 +155,45 @@ function playBall(hex, states, land) {
                     return feature;   
                   }
               }         
-        },
-        onEachFeature: function(feature,layer){
-            // for each hex, determine the top 10 teams tweeted
-            // and display on a mouseover event
-            
-            layer.on('mouseover', function() {                          
-
-                var tweets = layer.feature.properties.tweets;
-
-                // create an array of all beer tweets in that hexbin
-                var sortArray = []
-                for (var team in tweets ) {
-                    
-                    var val = tweets[team]; 
-                    if(team != normAtt) {
-                        sortArray.push({'team': team, 'val': val});
-                    }
-                }
-                
-                // sort that array high to low
-                sortArray = sortArray.sort(function (a, b) {
-                    return b.val - a.val;
-                });
-                
-                // remove the first two undefined
-                sortArray = sortArray.slice(2, sortArray.length)
-                // build html to display in info window
-                var html = '<h3>Top 10 Teams Tweeted</h3><ul>';
-                for(var i=0; i < 10; i++) {
-                    html+='<li>'+(i+1)+": "+displayNames[sortArray[i].team]+'</li>';   
-                }
-                html+='</ul>';  
-                
-                // populate stats info window with 10 ten for this hex
-                stats.html(html);
-            });     
-
         }
+//        ,
+//        onEachFeature: function(feature,layer){
+//            // for each hex, determine the top 10 teams tweeted
+//            // and display on a mouseover event
+//            
+//            layer.on('mouseover', function() {                          
+//
+//                var tweets = layer.feature.properties.tweets;
+//
+//                // create an array of all beer tweets in that hexbin
+//                var sortArray = []
+//                for (var team in tweets ) {
+//                    var val = tweets[team]; 
+//                    if(team != team2Att) {
+//                        sortArray.push({'team': team, 'val': val});
+//                    }
+//                }
+//                
+//                // sort that array high to low
+//                sortArray = sortArray.sort(function (a, b) {
+//                    return b.val - a.val;
+//                });
+//                
+//                // remove the first two undefined
+//                //sortArray = sortArray.slice(2, sortArray.length)
+//                
+//                // build html to display in info window
+//                var html = '<h3>Top 10 Teams Tweeted</h3><ul>';
+//                for(var i=0; i < 10; i++) {
+//                    html+='<li>'+(i+1)+": "+displayNames[sortArray[i].team]+'</li>';   
+//                }
+//                html+='</ul>';  
+//                
+//                // populate stats info window with 10 ten for this hex
+//                stats.html(html);
+//            });     
+//
+//        }
     }).addTo(map);
 
     // draw states borders on top of our polygons
@@ -227,17 +208,21 @@ function playBall(hex, states, land) {
             }
         }
     }).addTo(map);
-//    
+   
     // get a list of the available property variables
     var teams = Object.keys(hex.features[0].properties.tweets);
-
+    console.log(teams);
+    teams = teams.sort(function (a, b) {
+                return b.val - a.val;
+            });
+    console.log(teams);
     // populate UI with team variables
     buildUI(teams);
 
-  //  initial call to symbolize map
-   updateMap();
-//
-//    // create the legend
+    // initial call to symbolize map
+    updateMap();
+
+    // create the legend
     drawLegend();
 } // end ready
 
@@ -248,12 +233,12 @@ function updateMap() {
         var tweets = layer.feature.properties.tweets;
     
         // calculate a value for each hex based on the selected beer attribute
-        if(!tweets[normAtt]) { tweets[normAtt] = 1 }
+        if(!tweets[team2Att]) { tweets[team2Att] = 1 }
 
         // fancy calculations to remove some of the noise at the extreme ends of the distribution
-        var odds = (tweets[selectedAtt]/sumData[selectedAtt])/(tweets[normAtt]/sumData[normAtt]);
-        var ciUpper = Math.exp(Math.log(odds)+1.96*Math.sqrt(1/tweets[selectedAtt]+1/sumData[selectedAtt]+1/tweets[normAtt]+1/sumData[normAtt])) 
-        var ciLower = Math.exp(Math.log(odds)-1.96*Math.sqrt(1/tweets[selectedAtt]+1/sumData[selectedAtt]+1/tweets[normAtt]+1/sumData[normAtt])) 
+        var odds = (tweets[team1Att]/sumData[team1Att])/(tweets[team2Att]/sumData[team2Att]);
+        var ciUpper = Math.exp(Math.log(odds)+1.96*Math.sqrt(1/tweets[team1Att]+1/sumData[team1Att]+1/tweets[team2Att]+1/sumData[team2Att])) 
+        var ciLower = Math.exp(Math.log(odds)-1.96*Math.sqrt(1/tweets[team1Att]+1/sumData[team1Att]+1/tweets[team2Att]+1/sumData[team2Att])) 
         var ci = (ciUpper - ciLower) / odds
         var val = odds
         
@@ -274,8 +259,6 @@ function updateMap() {
 
     });
 
-    // really only changes if the normalizing value has 
-    // changed from tweet pop to a beer (or visa versa)
     updateLegend();
 
 } 
@@ -283,19 +266,19 @@ function updateMap() {
 function getColor(val){
     
     // determine if normalizd by tweet pop or other beer
-    if(normAtt == 'rn0to10000'){
+    if(team2Att == 'rn0to10000'){
         normalized = 'norm';
     } else {
         normalized = 'compare';
     }
     // loop through the appropriate break values, high to low
-    for (var i=0; i < breaks[normalized].length; i++) {
-        if(val >= breaks[normalized][i]){
-            return colorSchemes[normalized][i];
+    for (var i=0; i < breaks.length; i++) {
+        if(val >= breaks[i]){
+            return breakColors[i];
         }
         // add final color to the lowest value (or any values below it)
-        if(val < breaks[normalized][breaks[normalized].length-1]){
-             return colorSchemes[normalized][colorSchemes[normalized].length - 1]; 
+        if(val < breaks[breaks.length-1]){
+             return breakColors[breakColors.length - 1]; 
         }
     } 
 }
@@ -303,27 +286,30 @@ function getColor(val){
 function buildUI(vars) {
   
     // populate the form options with all our data values
-    var team1 = $("#team-1").append("<option value='Kentucky'>Kentucky</option>");;
+    var team1 = $("#team-1").append("<option value='Kentucky'>Kentucky</option>");
     var team2 = $("#team-2").append("<option value='Duke'>Duke</option>");
+    $(".team-1 label").append(team1Att);
+    $(".team-2 label").append(team2Att);
+    
     vars.forEach(function(v) {
         if(v != 'random') {
-            team1.append("<option value="+v+">"+displayNames[v]+"</option>");
-            team2.append("<option value="+v+">"+displayNames[v]+"</option>");
+            team1.append("<option value="+v+">"+v+"</option>");
+            team2.append("<option value="+v+">"+v+"</option>");
         }
     });
     
     // if user changes the selected attribute or normalized value, update the map
     team1.change(function(e) {
-        selectedAtt = team1.val();
+        team1Att = $("#team-1 option:selected").text();
         updateMap();
     });  
     team2.change(function(e) {
-        normAtt = team2.val();
+        team2Att = $("#team-2 option:selected").text();
         updateMap();
     });
     
     // sexy fadeIn of UI (why not?)
-    $('#ui').fadeIn(2000);
+    $('.ui').fadeIn(500);
     
     // only show the info window when hovering over our hexgrid
     hexgrid.on('click mouseover', function(e){
@@ -381,18 +367,15 @@ function drawLegend() {
 function updateLegend(){
     
     // populate legend with currently selected beer (and normalized beer if comparing)
-    var currentTeam = $("#team-1").val();
     
-    if(normAtt == 'random') { 
-        $('.legend').html('<h3>Probability of tweets<br> containing <span style="color:#005daa; background: rgb(245,245,245); padding: 1px 3px; margin: 0 2px; border-radius: 2px;">"'+displayNames[currentTeam]+'"</span></h3><ul>');
-        var labels = colorSchemes.normLabels;
-    } else {
-        $('.legend').html('<h3>Probability of tweets<br> containing <span style="color:#2c7bb6; background: rgb(245,245,245); padding: 1px 3px; margin: 0 2px; border-radius: 2px;">"'+displayNames[currentTeam]+'"</span>  vs <span style="color:#d7191c; background: rgb(245,245,245); padding: 1px 3px; margin: 0 2px; border-radius: 2px;">"'+displayNames[normAtt]+'"</span></h3><ul>');
-        var labels = colorSchemes.compareLabels;
-    }
+    var team1AttColor = '#2c7bb6',
+        team2AttColor = '#d7191c';
+    
+    $('.legend').html('<h3><span style="color:'+team1AttColor+' ">"'+team1Att+'"</span><span style="color:'+team2AttColor+'">"'+team2Att+'"</span></h3><ul>');
+  
 
-    for(var i=0; i<=colorSchemes[normalized].length-1;i++){
-        $('.legend ul').append('<li><span style="background: '+colorSchemes[normalized][i]+'"></span>'+labels[i]+'</li>');
+    for(var i=0; i<=breakColors.length-1;i++){
+        $('.legend ul').append('<li><span style="background: '+breakColors[i]+'"></span></li>');
     }
 
     $('.legend ul').append('</ul>');
