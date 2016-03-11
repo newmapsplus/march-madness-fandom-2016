@@ -1,18 +1,41 @@
 /* Styles written by Rich Donohue for New Maps Plus and Floating Sheep */
 @import url(https://fonts.googleapis.com/css?family=Graduate);
+/*
+@font-face {
+    font-family: 'sf_sports_nightregular';
+    src: url('fonts/sfsportsnight-webfont.eot');
+    src: url('fonts/sfsportsnight-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/sfsportsnight-webfont.woff2') format('woff2'),
+         url('fonts/sfsportsnight-webfont.woff') format('woff'),
+         url('fonts/sfsportsnight-webfont.ttf') format('truetype'),
+         url('fonts/sfsportsnight-webfont.svg#sf_sports_nightregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+*/
 @font-face {
     font-family: 'SFSportsNight';
-    src: url('../fonts/SFSportsNight.ttf');
+    src: url('fonts/SFSportsNight.ttf');
 }
+/*
 @font-face {
-    font-family: 'OctinSportsRg';
-    src: url('../fonts/OctinSportsRg.ttf');
+    font-family: 'octin_sportsregular';
+    src: url('fonts/octin_sports_rg-webfont.eot');
+    src: url('fonts/octin_sports_rg-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/octin_sports_rg-webfont.woff2') format('woff2'),
+         url('fonts/octin_sports_rg-webfont.woff') format('woff'),
+         url('fonts/octin_sports_rg-webfont.ttf') format('truetype'),
+         url('fonts/octin_sports_rg-webfont.svg#octin_sportsregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
+*/
 body {
     margin: 0;
     padding: 0;
     background: whitesmoke;
-    font-family: 'OctinSportsRg', sans-serif;
+    font-family: 'octin_sportsregular', sans-serif;
     color: #202020;
 }
 header {
@@ -24,7 +47,7 @@ header {
     border-bottom: 2px solid #d1701a;
 }
 h1 {
-    font-family: 'SFSportsNight', serif;
+    font-family: 'SFSportsNight', Graduate, serif;
     position: absolute;
     z-index: 200;
     color: #005dab;
@@ -227,7 +250,7 @@ p {
     display: inline-block;
 }
 .legend, .stats {
-    font-family: 'OctinSportsRg', serif;
+    font-family: 'octin_sportsregular', serif;
     font-size: 1em;
     color: #333;
 }
