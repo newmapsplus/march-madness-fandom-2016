@@ -18,7 +18,6 @@
     font-family: 'SFSportsNight';
     src: url('fonts/SFSportsNight.ttf');
 }
-/*
 @font-face {
     font-family: 'octin_sportsregular';
     src: url('fonts/octin_sports_rg-webfont.eot');
@@ -30,7 +29,6 @@
     font-weight: normal;
     font-style: normal;
 }
-*/
 body {
     margin: 0;
     padding: 0;
