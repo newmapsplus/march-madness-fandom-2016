@@ -18,49 +18,44 @@
 </head>
 
 <body>
-    <h1>NCAA 2016 <span>Battle</span> of the Tweet Fandom</h1>
-    <a href='#' id='huh'>about</a>
-    <div id='about'>
-        <h3>About This Map</h3>
-        <div>
-            <p>This map is a joint <a href='http://newmapsplus.uky.edu/' target='_blank'>New Maps Plus</a> and <a href='http://www.floatingsheep.org/' target='_blank'>FloatingSheep</a> project. Use the menus at the right to explore the haze of beer tweets gently drifting over the United States.</p>
-            <p>More saturated (darker) colors indicate a higher probability of tweets containing the text of the selected beer type. You can visually explore a variety of beers by selecting a new beer. By default, a given beer is normalized by the entire tweet population. You can also compare two different beers. Hexagons without a significant number of observations/tweets do not show up. That's why some beers have more coverage than others.</p>
-            <p>Utilizing the <a href='http://leafletjs.com/' target='_blank'>Leaflet library</a>, the map aggregates point-level data into .35 degree hexbin polygon units to show the spatial distribution of the tweets related to specific beers. A single beer normalized by the tweet population is encoded using a 5-class sequential color scheme, while the comparison of two beers uses a 5-class divergent color scheme. The map is also projected into an Albers equal-area projection (with the help of <a href='https://github.com/cartodb/cartodb.proj' target='_blank'>CartoDB's cardodb.proj extension</a>).</p>
-            <h4>Data Collection and Cultivation</h4>
-            <p>Data for this map was pulled from the <a href='http://www.floatingsheep.org/p/dolly.html' target='_blank'>Dolly project</a>. We then wrote scripts in R and Node.js to process and aggregate totals into hexbin polygons, and encoded the results as GeoJSON, which were then loaded into the map client-side at runtime.</p>
-  
-        </div>
-        <h4>Authors</h4>
-        <ul>
-            <li><b><a href='http://newmapsplus.uky.edu/directors-welcome' target='_blank'>Matthew Zook</a></b> (creative direction)</li>
-            <li><b><a href='https://github.com/atepoorthuis' target='_blank'>Ate Poortuis</a></b> (data wrangling)</li>
-            <li><b><a href='https://twitter.com/rgdonohue' target='_blank'>Rich Donohue</a></b> (map and UI design and development)</li>
-        </ul>
-        <h4>Data Sources</h4>
-        <p>The <a href='https://dev.twitter.com/streaming/overview'>Twitter API</a></p>
-        <h4>Additional Information</h4>
-        <p>A write-up and some static images are available at <a href='http://www.floatingsheep.org/2015/07/beertweets.html' target='_blank'>Floating Sheep</a>.</p>
-        <p>The code for this project is licensed under a <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Creative Commons Attribution-Noncommercial-Share Alike 3.0 Unsupported License</a> and hosted as a <a href='https://github.com/newmapsplus/maps/' target='_blank'>New Maps Plus GitHub repository.</a></p>
+<header> 
+    <h1>NCAA 2016 <span>Battle</span><br> of Twitter Fandom</h1>
+    <h2><span>Kentucky</span> vs. <span>Duke</span></h2>
+</header>
+<div id='map'></div>
+<!--
+<div class='ui team-1'>
+    <label>Choose Team #1</label><br>
+    <select id='team-1'></select>
+</div>
+<div class='ui team-2'>
+    <label>Choose Team #2</label><br>
+    <select id='team-2'></select>
+</div>
+-->
+<div id="ui-controls">
+<dl class="dropdown team-1">
+    <dt><a href="#"><span>Choose Team #1</span></a></dt>
+    <dd><ul></ul></dd>
+</dl>
+<dl class="dropdown team-2">
+    <dt><a href="#"><span>Choose Team #2</span></a></dt>
+    <dd><ul></ul></dd>
+</dl>
+</div>
     
-    </div>
-    <div id='map'></div>
-    <div class='ui team-1'>
-        <label></label><br>
-        <select id='team-1'></select>
-    </div>
-    <div class='ui team-2'>
-        <label></label><br>
-        <select id='team-2'></select>
-    </div>
-    <div id='branding'><a href='http://newmapsplus.uky.edu/' title='Check us out and learn how to make a map like this!' target='_blank'><img src='img/nmp.png' alt='New Maps Plus' /></a></div>
-    <div class='stats'></div>  
-    <div id='cover'></div>
-    <div id='mobile-apology'>
-        <p>We apologize, but this thematic web map is best experienced on a tablet or PC.</p>
-        <p>While this is a terrible practice in most web design cases, we also believe that some interactive thematic maps don't really belong on smaller phones and handheld devices.</p>
-    </div>
-    
-    <script src='js/map.js'></script>
+<div id='branding'>
+    <a href='http://uky.edu/' title='University of Kentucky' target='_blank'><img src='img/uk-logo.png' alt='University of Kentucky Logo' /></a> <br>
+    <a href='http://newmapsplus.uky.edu/' title='Check us out and learn how to make a map like this!' target='_blank'><img src='img/nmp.png' alt='New Maps Plus' /></a>
+</div>
+<div class='stats'></div>  
+<div id='cover'></div>
+<div id='mobile-apology'>
+    <p>We apologize, but this thematic web map is best experienced on a tablet or PC.</p>
+    <p>While this is a terrible practice in most web design cases, we also believe that some interactive thematic maps don't really belong on smaller phones and handheld devices.</p>
+</div>
+
+<script src='js/map.js'></script>
 </body>
 
 </html>

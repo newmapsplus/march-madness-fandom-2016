@@ -1,36 +1,44 @@
 /* Styles written by Rich Donohue for New Maps Plus and Floating Sheep */
-@import url(http://fonts.googleapis.com/css?family=Lato);
 @import url(https://fonts.googleapis.com/css?family=Graduate);
 @font-face {
     font-family: 'SFSportsNight';
     src: url('../fonts/SFSportsNight.ttf');
 }
+@font-face {
+    font-family: 'OctinSportsRg';
+    src: url('../fonts/OctinSportsRg.ttf');
+}
 body {
     margin: 0;
     padding: 0;
     background: whitesmoke;
-    font-family: 'Lato', sans-serif;
+    font-family: 'OctinSportsRg', sans-serif;
     color: #202020;
+}
+header {
+    background: #f5f5f5;
+    height: 95px;
+    width: 100%;
+    position: absolute;
+    z-index: 200;
+    border-bottom: 2px solid #d1701a;
 }
 h1 {
     font-family: 'SFSportsNight', serif;
     position: absolute;
     z-index: 200;
-    color: #d3d3d3;
-    font-size: 2.4em;
-    font-weight: 400;
-    top: 10px;
+    color: #005dab;
+    font-size: 2em;
+    top: 0;
     margin: 0;
-    padding: 6px 10px;
-    right: 15px;
+    padding: 6px 15px;
+    left: 10px;
     display: inline-block;
-    line-height: 1.05em;
-    background: whitesmoke;
+    line-height: 1.2em;
     max-width: 40%;
-    text-align: right;
 }
 h1 span {
-    text-shadow: 2px 2px 0 #282828, 4px 4px 0 #43a2ca;
+    text-shadow: 2px 2px 0 #f5f5f5, 5px 5px 0 #d1701a;
 }
 h1 img {
     position: absolute;
@@ -38,17 +46,20 @@ h1 img {
     left: -70px;
 }
 h2 {
-    font-family: 'Montserrat', serif;
     position: absolute;
-    top: 45px;
-    left: 20px;
+    top: 0px;
+    margin: 0;
+    right: 20px;
     z-index: 200;
-    max-width: 40%;
-    color: #f0f9e8;
-    font-size: 1.3em;
+    font-size: 3.4em;
+    letter-spacing: .02em;
     font-weight: 400;
     font-variant: small-caps;
     display: inline-block;
+    color: #d1701a;
+}
+h2 span:last-child {
+    text-shadow: 2px 2px #005dab;
 }
 #huh {
     position: absolute;
@@ -123,7 +134,7 @@ b {
     bottom:0; 
     width:100%; 
     z-index: 100;
-    background: #e1e1e1;
+    background: #cecece;
 }
 #cover {
     position:absolute; 
@@ -142,31 +153,71 @@ p {
     font-size: 1em;
     color: #001323;
 }
-.hexbin-hexagon {
-    stroke: #000;
-    stroke-width: 1px;
-}
-.ui {
+#ui-controls {
     position: absolute;
-    top: 15px;
+    top: 42px;
+    right: 20px;
     z-index: 200;
     display: none; /* initially hide until populated */
 }
-.team-1 {
-    left: 20px;
+#ui-controls dl {
+    display: inline-block;
+    margin-left: 50px;
 }
-.team-2 {
-    left: 250px;
+.dropdown dd, .dropdown dt, .dropdown ul { 
+    margin:0px; 
+    padding:0px; 
 }
-.ui label {
-    color: white;  
-    float: right;
-    font-size: 1.7em;
+.dropdown dd { 
+    position:relative; 
 }
-.ui select {
-    margin: 6px 0;
-    float: right;
-    font-size: 1.1em;
+.dropdown a, .dropdown a:visited { 
+    color:#d1701a; 
+    text-decoration:none; 
+    outline:none;
+}
+.dropdown a:hover { 
+    color: whitesmoke;
+}
+.dropdown dt a:hover { 
+    color: whitesmoke; 
+    background-color:#005dab;
+    border: 1px solid #d1701a;
+}
+.dropdown dt a {
+    background: whitesmoke url(../img/arrow2.png) no-repeat scroll right center; display:block; 
+    padding-right:20px;
+    border:1px solid #d1701a; 
+    width:150px;
+}
+.dropdown dt a span {
+    cursor:pointer; 
+    display:block; padding:5px;
+}
+.dropdown dd ul { 
+    background: whitesmoke none repeat scroll 0 0; 
+    border:1px solid #d4ca9a; 
+    color:#C5C0B0; 
+    display:none;
+    left:0px; 
+    padding:5px 0px; 
+    position:absolute; 
+    top:2px; 
+    height: 400px;
+    overflow-y: scroll;
+    width:auto; 
+    min-width:170px; 
+    list-style:none;
+}
+.dropdown span.value { 
+    display:none;
+}
+.dropdown dd ul li a { 
+    padding:5px; 
+    display:block;
+}
+.dropdown dd ul li a:hover { 
+    background-color:#005dab;
 }
 
 
@@ -176,7 +227,7 @@ p {
     display: inline-block;
 }
 .legend, .stats {
-    font-family: 'Lato', serif;
+    font-family: 'OctinSportsRg', serif;
     font-size: 1em;
     color: #333;
 }
@@ -185,19 +236,25 @@ p {
     z-index: 200;
     width:auto;
     display: none;
+    background: rgba(244, 244, 244, .8);
+    border: 2px #d1701a solid;
+    border-radius: 5px;
+    color: #005dab;
+    padding: 6px 10px;
 }
 .stats h3 {
     padding: 0;
     margin: 6px 0 0;
     position: relative;
 }
-.stats ul, .cities ul {
+.stats ul {
     list-style-type: none;
     padding: 0;
     margin: 5px 0 0 0;
+    color: #020203;
 }
 .legend h3 {
-    font-size: 1.2em;
+    font-size: 1.6em;
     font-weight: 400;
     margin: 0;
 }
@@ -220,8 +277,8 @@ p {
     display: inline-block;
 }
 .legend ul span {
-    width: 50px;
-    height: 20px;
+    width: 80px;
+    height: 30px;
     float: left;
     margin-right: 0;
 }
@@ -231,6 +288,9 @@ p {
     left: 10px;
     bottom: 10px;
     z-index: 200;
+}
+#branding a {
+  margin-bottom: 20px;
 }
 #sheep {
     opacity: .6;

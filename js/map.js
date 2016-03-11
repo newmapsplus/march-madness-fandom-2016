@@ -43,19 +43,19 @@ var map = L.map('map', {
 L.graticule({
     interval: 5,
     style: {
-        color: 'white',
+        color: 'whitesmoke',
         opacity: .4,
-        weight: 2
+        weight: 1
     }      
 }).addTo(map);
 
-// initial global variables
-var team1Att, 
+// cheat'n global variables
+var team1Att = 'Kentucky', 
     team2Att = 'Duke',
     hexgrid,
-    stats,
+    stats = $(".stats"),
     breaks = [2.5,1.25,.8,.4],
-    breakColors = ['#2c7bb6','#abd9e9','#ffffbf','#fdae61','#d7191c'],
+    breakColors = ['#005dab','#3182bd','#6baed6','#bdd7e7','#eff3ff'],
     sumData;
 
 
@@ -97,25 +97,19 @@ function processData(e,hex,data,keys,states,land) {
 
 function playBall(hex, states, land) {
     
-     L.geoJson(land, {
-            style: function(feature) {
-                return {                
-                    stroke: false,
-                    fill: true,
-                    color: '#f4f4f4',
-                    weight: 1,
-                    fillOpacity: 1
-                }
+    // add background landmass layer
+    L.geoJson(land, {
+        style: function(feature) {
+            return {                
+                stroke: false,
+                fill: true,
+                fillColor: '#f4f4f4',
+                weight: 2,
+                fillOpacity: 1
             }
-        }).addTo(map);
-    
-    // store this selection as we make it frequently
-    stats = $(".stats");   
-
-    // set initial map view with 'beer' variable
-    team1Att =  'Kentucky';
-    $("#team-1").val('Kentucky')
-
+        }
+    }).addTo(map);
+      
     // create a new object from data to hold summed values for normalizing
     sumData = JSON.parse(JSON.stringify(hex.features[0].properties.tweets));
    
@@ -127,7 +121,7 @@ function playBall(hex, states, land) {
     // then loop through data and aggregate totals for each property
     hex.features.forEach(function(f) {
        for(var p in f.properties.tweets) {
-           if(p != 'total' && p != 'hex') {
+           if(p != 'total' && p != 'hex' && p != 'random') {
                sumData[p]+=f.properties.tweets[p]
            }
        }   
@@ -140,7 +134,7 @@ function playBall(hex, states, land) {
             return {                
                 stroke: true,
                 fill: true,
-                color: '#b3b3b3',
+                color: '#d1701a',
                 fillColor: '#e0e0e0',
                 weight: 1,
                 fillOpacity: 1
@@ -149,51 +143,50 @@ function playBall(hex, states, land) {
         },
         filter: function(feature) {
             
-              // don't create the polygons with no data
+              // filter out the polygons with no data
               for(var prop in feature.properties){
                   if(Number(feature.properties[prop].total) > 0) {
                     return feature;   
                   }
               }         
+        },
+        onEachFeature: function(feature,layer){
+            // for each hex, determine the top 10 teams tweeted
+            // and display on a mouseover event
+            
+            layer.on('mouseover', function() {                          
+
+                var tweets = layer.feature.properties.tweets;
+
+                // create an array of all tweets in that hexbin
+                var sortArray = []
+                for (var team in tweets ) {
+                    var val = tweets[team]; 
+                    if(team != 'hex' && team != 'random' & team != 'total') {
+                        sortArray.push({'team': team, 'val': val});
+                    }
+                }
+                
+                // sort that array high to low
+                sortArray = sortArray.sort(function (a, b) {
+                    return b.val - a.val;
+                });
+                
+                // remove the first two undefined
+                //sortArray = sortArray.slice(2, sortArray.length)
+                
+                // build html to display in info window
+                var html = '<h3>Top 10 Teams<br>Tweeted</h3><ul>';
+                for(var i=0; i < 10; i++) {
+                    html+='<li>'+(i+1)+": "+sortArray[i].team+'</li>';   
+                }
+                html+='</ul>';  
+                
+                // populate stats info window with 10 ten for this hex
+                stats.html(html);
+            });     
+
         }
-//        ,
-//        onEachFeature: function(feature,layer){
-//            // for each hex, determine the top 10 teams tweeted
-//            // and display on a mouseover event
-//            
-//            layer.on('mouseover', function() {                          
-//
-//                var tweets = layer.feature.properties.tweets;
-//
-//                // create an array of all beer tweets in that hexbin
-//                var sortArray = []
-//                for (var team in tweets ) {
-//                    var val = tweets[team]; 
-//                    if(team != team2Att) {
-//                        sortArray.push({'team': team, 'val': val});
-//                    }
-//                }
-//                
-//                // sort that array high to low
-//                sortArray = sortArray.sort(function (a, b) {
-//                    return b.val - a.val;
-//                });
-//                
-//                // remove the first two undefined
-//                //sortArray = sortArray.slice(2, sortArray.length)
-//                
-//                // build html to display in info window
-//                var html = '<h3>Top 10 Teams Tweeted</h3><ul>';
-//                for(var i=0; i < 10; i++) {
-//                    html+='<li>'+(i+1)+": "+displayNames[sortArray[i].team]+'</li>';   
-//                }
-//                html+='</ul>';  
-//                
-//                // populate stats info window with 10 ten for this hex
-//                stats.html(html);
-//            });     
-//
-//        }
     }).addTo(map);
 
     // draw states borders on top of our polygons
@@ -202,20 +195,16 @@ function playBall(hex, states, land) {
             return {                
                 stroke: true,
                 fill: false,
-                color: '#d3d3d3',
+                color: '#cad4dd',
                 weight: 1,
-                opacity: .3
+                opacity: .5
             }
         }
     }).addTo(map);
    
     // get a list of the available property variables
     var teams = Object.keys(hex.features[0].properties.tweets);
-    console.log(teams);
-    teams = teams.sort(function (a, b) {
-                return b.val - a.val;
-            });
-    console.log(teams);
+    teams.sort();
     // populate UI with team variables
     buildUI(teams);
 
@@ -285,31 +274,60 @@ function getColor(val){
 
 function buildUI(vars) {
   
-    // populate the form options with all our data values
-    var team1 = $("#team-1").append("<option value='Kentucky'>Kentucky</option>");
-    var team2 = $("#team-2").append("<option value='Duke'>Duke</option>");
-    $(".team-1 label").append(team1Att);
-    $(".team-2 label").append(team2Att);
+    $("h2 span:first-child").text(team1Att).css('color',breakColors[0]);
+    $("h2 span:last-child").text(team2Att).css('color',breakColors[4]);
+    
+    var team1 = $('.team-1 ul').append('<li><a href="#">Kentucky<span class="value">Kentucky</span></a></li>');
+    var team2 = $('.team-2 ul').append('<li><a href="#">Duke<span class="value">Duke</span></a></li>');
     
     vars.forEach(function(v) {
-        if(v != 'random') {
-            team1.append("<option value="+v+">"+v+"</option>");
-            team2.append("<option value="+v+">"+v+"</option>");
+        if(v != 'random' && v != 'hex' && v != 'total') {
+            team1.append('<li><a href="#">'+v+'<span class="value">'+v+'</span></a></li>')
+            team2.append('<li><a href="#">'+v+'<span class="value">'+v+'</span></a></li>')
         }
     });
     
-    // if user changes the selected attribute or normalized value, update the map
-    team1.change(function(e) {
-        team1Att = $("#team-1 option:selected").text();
-        updateMap();
-    });  
-    team2.change(function(e) {
-        team2Att = $("#team-2 option:selected").text();
-        updateMap();
+    // make visible once populated
+    $('#ui-controls').fadeIn(500);
+
+    $(".team-1 dt a").click(function(e) {
+        $(".team-1 dd ul").toggle();
     });
     
-    // sexy fadeIn of UI (why not?)
-    $('.ui').fadeIn(500);
+
+    $(".team-1 dd ul li a").click(function() {
+        var text = $(this).html();
+        $(".team-1 dt a span").html(text);
+        $(".dropdown dd ul").hide();
+        team1Att = getSelectedValue('team-1');
+        updateMap();
+        $("h2 span:first-child").text(team1Att).css('color',breakColors[0]);
+    });
+    
+    $(".team-2 dt a").click(function(e) {
+        $(".team-2 dd ul").toggle();
+    });
+
+    $(".team-2 dd ul li a").click(function() {
+        var text = $(this).html();
+        $(".team-2 dt a span").html(text);
+        $(".dropdown dd ul").hide();
+        team2Att = getSelectedValue('team-2');
+        updateMap();
+        $("h2 span:last-child").text(team2Att).css('color',breakColors[4]);
+    });
+
+
+    $(document).bind('click', function(e) {
+        var $clicked = $(e.target);
+        if (! $clicked.parents().hasClass("dropdown"))
+            $(".dropdown dd ul").hide();
+    });
+    
+    function getSelectedValue(classId) {
+        return $("." + classId).find("a span.value").html();
+    }
+    
     
     // only show the info window when hovering over our hexgrid
     hexgrid.on('click mouseover', function(e){
@@ -368,10 +386,10 @@ function updateLegend(){
     
     // populate legend with currently selected beer (and normalized beer if comparing)
     
-    var team1AttColor = '#2c7bb6',
-        team2AttColor = '#d7191c';
+    var team1AttColor = breakColors[0],
+        team2AttColor = breakColors[4];
     
-    $('.legend').html('<h3><span style="color:'+team1AttColor+' ">"'+team1Att+'"</span><span style="color:'+team2AttColor+'">"'+team2Att+'"</span></h3><ul>');
+    $('.legend').html('<h3><span style="color:'+team1AttColor+' ">'+team1Att+'</span><span style="color:'+team2AttColor+'">'+team2Att+'</span></h3><ul>');
   
 
     for(var i=0; i<=breakColors.length-1;i++){
