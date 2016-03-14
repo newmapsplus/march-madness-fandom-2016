@@ -29,7 +29,7 @@ switch (true) {
 
 // create initial map object and use CartoDB's projection to reproject
 var map = L.map('map', {
-    center: [40,-93],
+    center: [40,-95],
     zoom: zoomLevel,
     minZoom: zoomLevel - .3,
     maxZoom: zoomLevel + .3,
@@ -106,6 +106,19 @@ function playBall(hex, states, land) {
                 fillColor: '#f4f4f4',
                 weight: 2,
                 fillOpacity: 1
+            }
+        }
+    }).addTo(map);
+    
+    // draw states fills below our polygons
+    L.geoJson(states, {
+        style: function(feature) {
+            return {                
+                stroke: false,
+                fill: true,
+                color: '#adadad',
+                weight: 1,
+                opacity: 1
             }
         }
     }).addTo(map);
@@ -195,9 +208,9 @@ function playBall(hex, states, land) {
             return {                
                 stroke: true,
                 fill: false,
-                color: '#cad4dd',
+                color: 'white',
                 weight: 1,
-                opacity: .5
+                opacity: 1
             }
         }
     }).addTo(map);
