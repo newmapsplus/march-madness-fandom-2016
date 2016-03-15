@@ -26,7 +26,7 @@ switch (true) {
         zoomLevel = 4;
         break;
 }
-
+console.log(zoomLevel);
 // create initial map object and use CartoDB's projection to reproject
 var map = L.map('map', {
     center: [40,-95],
@@ -55,8 +55,7 @@ var team1Att = 'Kentucky',
     hexgrid,
     stats = $(".stats"),
     breaks = [2.5,1.25,.8,.4],
-    breakColors = ['#005dab','#3182bd','#6baed6','#bdd7e7','#eff3ff'],
-    breakOpacities = [1, .7, .5, .3, .1],
+    breakColors = ['#005daa','#1f80d1','#f1f1ca','#ea964c','#d1701a'],
     sumData;
 
 function calculateBreakColors(colorIn) {
@@ -122,7 +121,7 @@ function playBall(hex, states, land) {
             return {                
                 stroke: false,
                 fill: true,
-                color: 'whitesmoke',
+                color: '#dfdfdf',
                 weight: 1,
                 opacity: 1
             }
@@ -153,9 +152,9 @@ function playBall(hex, states, land) {
             return {                
                 stroke: true,
                 fill: true,
-                color: '#d1701a',
+                color: 'whitesmoke',
                 fillColor: '#e0e0e0',
-                weight: 1,
+                weight: .5,
                 fillOpacity: 1
 
             }
@@ -221,8 +220,8 @@ function playBall(hex, states, land) {
     // initial call to symbolize map
     updateMap();
 
-    // create the legend
-    drawLegend();
+    // sexy legend fadeIn
+    $('.legend').fadeIn(1000);
 } // end ready
 
 function updateMap() {       
@@ -246,8 +245,7 @@ function updateMap() {
             layer.setStyle({
                 fill: true,
                 stroke: true,
-                fillColor: colors[team1Att],
-                fillOpacity: getOpacity(val)
+                fillColor: getColor(val)
             });   
         } else {
             // don't display the ones with no data for this attribute
@@ -284,38 +282,15 @@ function getColor(val){
 }
 
 
-function getOpacity(val){
-    
-    // determine if normalizd by tweet pop or other beer
-    if(team2Att == 'rn0to10000'){
-        normalized = 'norm';
-    } else {
-        normalized = 'compare';
-    }
-    // loop through the appropriate break values, high to low
-    for (var i=0; i < breaks.length; i++) {
-        if(val >= breaks[i]){
-            return breakOpacities[i];
-        }
-        // add final color to the lowest value (or any values below it)
-        if(val < breaks[breaks.length-1]){
-             return breakColors[breakOpacities.length - 1]; 
-        }
-    } 
-}
-
 function buildUI(vars) {
-  
-//    $("h2 span:first-child").text(team1Att).css('color',colors[team1Att]);
-//    $("h2 span:last-child").text(team2Att).css('color',colors[team2Att]);
     
     var team1 = $('.team-1 ul').append('<li><a href="#">Kentucky<span class="value">Kentucky</span></a></li>');
     var team2 = $('.team-2 ul').append('<li><a href="#">Duke<span class="value">Duke</span></a></li>');
     
     vars.forEach(function(v) {
         if(v != 'random' && v != 'hex' && v != 'total') {
-            team1.append('<li><a style="color:'+colors[v]+'"href="#">'+v+'<span class="value">'+v+'</span></a></li>')
-            team2.append('<li><a style="color:'+colors[v]+'"href="#">'+v+'<span class="value">'+v+'</span></a></li>')
+            team1.append('<li><a "href="#">'+v+'<span class="value">'+v+'</span></a></li>')
+            team2.append('<li><a "href="#">'+v+'<span class="value">'+v+'</span></a></li>')
         }
     });
     
@@ -326,8 +301,8 @@ function buildUI(vars) {
         $(".team-1 dd ul").toggle();
     });
     
-    $(".team-1 dt a span").html(team1Att).css('color',colors[team1Att]);
-    $(".team-2 dt a span").html(team2Att).css({'color': 'white', 'text-shadow' : getTextShadow()});
+    $(".team-1 dt a span").html(team1Att).css('color',breakColors[0]);
+    $(".team-2 dt a span").html(team2Att).css('color',breakColors[4]);
 
     $(".team-1 dd ul li a").click(function() {
         var text = $(this).html();
@@ -335,7 +310,7 @@ function buildUI(vars) {
         $(".dropdown dd ul").hide();
         team1Att = getSelectedValue('team-1');
         updateMap();
-        $(".team-1 dt a span").html(team1Att).css('color',colors[team1Att]);
+        $(".team-1 dt a span").html(team1Att);
     });
     
     $(".team-2 dt a").click(function(e) {
@@ -348,7 +323,7 @@ function buildUI(vars) {
         $(".dropdown dd ul").hide();
         team2Att = getSelectedValue('team-2');
         updateMap();
-        $(".team-2 dt a span").html(team2Att).css({'color': 'white', 'text-shadow' : getTextShadow()});
+        $(".team-2 dt a span").html(team2Att);
     });
 
 
@@ -400,39 +375,15 @@ function buildUI(vars) {
     });
 }
 
-function drawLegend() {
-
-    // create a legend control and add to bottom right
-//    var legend = L.control({position: 'bottomright'});
-//    legend.onAdd = function(map) {
-//        var div = L.DomUtil.create('div', 'legend');
-//        return div;
-//    };
-//    legend.addTo(map);
-    updateLegend();
-    
-    // sexy fadeIn
-    $('.legend').fadeIn(2000);
-
-}
-
-function getTextShadow() {
-    return '2px 2px ' + colors[team2Att];
-}
 
 function updateLegend(){
     
-    // populate legend with currently selected beer (and normalized beer if comparing)
-    
-    var team1AttColor = colors[team1Att],
-        team2AttColor = getTextShadow();
-    
-    $('.legend').html('<h3><span style="color:'+team1AttColor+' ">'+team1Att+'</span><span style="color:white;text-shadow:'+team2AttColor+'">'+team2Att+'</span></h3><ul>');
+    $('.legend').html('<h3><span style="color:'+breakColors[0]+' ">'+team1Att+'</span><span style="color:'+breakColors[4]+'">'+team2Att+'</span></h3><ul>');
   
 
     for(var i=0; i<=breakColors.length-1;i++){
-//        $('.legend ul').append('<li><span style="background: '+breakColors[i]+'"></span></li>');
-         $('.legend ul').append('<li><span style="background: '+colors[team1Att]+';opacity:'+breakOpacities[i]+'"></span></li>');
+        $('.legend ul').append('<li><span style="background: '+breakColors[i]+'"></span></li>');
+
     }
 
     $('.legend ul').append('</ul>');
