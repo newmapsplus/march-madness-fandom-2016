@@ -287,12 +287,17 @@ p {
     border-radius: 5px;
     color: #005daa;
     padding: 6px 10px;
+    display: none;
 }
 #team-1tags {
     left: 30px;
+    border: 2px #005daa solid;
+    color: #005daa;
 }
 #team-2tags {
     right: 30px;
+    border: 2px #d1701a solid;
+    color: #d1701a;
 }
 
 /* LEGEND */
@@ -304,7 +309,7 @@ p {
     bottom: -25px;
     z-index: 200;
     background: whitesmoke;
-    padding: 10px 25px;
+    padding: 6px 25px;
     border: 2px #d1701a solid;
     border-radius: 5px;
     display: none;
@@ -333,7 +338,7 @@ p {
 .stats ul {
     list-style-type: none;
     padding: 0;
-    margin: 5px 0 0 0;
+    margin: 5px 0 10px 0;
     color: #020203;
 }
 .legend h3 {
