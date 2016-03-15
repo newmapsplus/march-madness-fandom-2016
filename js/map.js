@@ -30,8 +30,8 @@ switch (true) {
 var map = L.map('map', {
     center: [40,-95],
     zoom: zoomLevel,
-    minZoom: zoomLevel - .3,
-    maxZoom: zoomLevel + .3,
+    minZoom: zoomLevel - .4,
+    maxZoom: zoomLevel + .4,
     zoomControl: false,
     doubleClickZoom: false,
     attributionControl: false,
