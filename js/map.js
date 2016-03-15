@@ -224,7 +224,7 @@ function playBall(hex, states, land) {
 
     // sexy fadeins
     $('.legend').fadeIn(1000);
-    $('#team-1tags, team-2tags').fadeIn(1000);
+    $('#team-1tags, #team-2tags').fadeIn(1000);
 } // end ready
 
 function updateMap() {       

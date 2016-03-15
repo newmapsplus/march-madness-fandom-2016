@@ -321,7 +321,7 @@ p {
 }
 .stats {
     position: absolute;
-    z-index: 200;
+    z-index: 800;
     width:auto;
     display: none;
     background: rgba(244, 244, 244, .8);
