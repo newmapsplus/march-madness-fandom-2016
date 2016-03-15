@@ -272,9 +272,8 @@ p {
     left: 35%;
     bottom: 0;
     z-index: 200;
-    background: #adadad;
-    padding: 15px 15px;
-    border: 1px #adadad solid;
+    background: whitesmoke;
+    padding: 15px 25px;
 }
 .legend, .stats {
     font-family: 'octin_sportsregular', serif;
@@ -310,12 +309,12 @@ p {
 }
 .legend h3 span:first-child {
     position: absolute;
-    left: 2px;
+    left: 10px;
     top: 2px;
 }
 .legend h3 span:last-child {
     position: absolute;
-    right: 2px;
+    right: 10px;
     top: 2px;
     text-shadow: 2px 2px #005dab;
 }
@@ -349,9 +348,6 @@ p {
 }
 #branding a:last-child {
     right: 20px;
-}
-#sheep {
-    opacity: .6;
 }
 #mobile-apology {
     position:absolute; 

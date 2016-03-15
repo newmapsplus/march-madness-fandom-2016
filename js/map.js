@@ -122,7 +122,7 @@ function playBall(hex, states, land) {
             return {                
                 stroke: false,
                 fill: true,
-                color: '#adadad',
+                color: 'whitesmoke',
                 weight: 1,
                 opacity: 1
             }
@@ -205,7 +205,7 @@ function playBall(hex, states, land) {
             return {                
                 stroke: true,
                 fill: false,
-                color: 'white',
+                color: '#adadad',
                 weight: 1,
                 opacity: 1
             }
@@ -314,8 +314,8 @@ function buildUI(vars) {
     
     vars.forEach(function(v) {
         if(v != 'random' && v != 'hex' && v != 'total') {
-            team1.append('<li><a href="#">'+v+'<span class="value">'+v+'</span></a></li>')
-            team2.append('<li><a href="#">'+v+'<span class="value">'+v+'</span></a></li>')
+            team1.append('<li><a style="color:'+colors[v]+'"href="#">'+v+'<span class="value">'+v+'</span></a></li>')
+            team2.append('<li><a style="color:'+colors[v]+'"href="#">'+v+'<span class="value">'+v+'</span></a></li>')
         }
     });
     
