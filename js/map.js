@@ -222,11 +222,7 @@ function playBall(hex, states, land) {
     // initial call to symbolize map
     updateMap();
 
-<<<<<<< 4e5efe2bd4e8d75e9fd88d97afdb026bf61d878a
-    // sexy fadeins
-=======
     // sexy fadeIns when data is ready
->>>>>>> changes
     $('.legend').fadeIn(1000);
     $('#team-1tags, #team-2tags').fadeIn(1000);
 } // end ready
