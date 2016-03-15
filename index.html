@@ -20,34 +20,24 @@
 <body>
 <header> 
     <h1>NCAA 2016 <span>Battle</span><br> of Twitter Fandom</h1>
-    <h2><span>Kentucky</span><span>Duke</span></h2>
+<!--    <h2><span>Kentucky</span><span>Duke</span></h2>-->
 </header>
 <div id='map'></div>
-<!--
-<div class='ui team-1'>
-    <label>Choose Team #1</label><br>
-    <select id='team-1'></select>
-</div>
-<div class='ui team-2'>
-    <label>Choose Team #2</label><br>
-    <select id='team-2'></select>
-</div>
--->
 <div id="ui-controls">
 <dl class="dropdown team-1">
-    <dt><a href="#"><span>Choose Team #1</span></a></dt>
+    <dt><a href="#"><span></span></a></dt>
     <dd><ul></ul></dd>
 </dl>
     <span>vs.</span>
 <dl class="dropdown team-2">
-    <dt><a href="#"><span>Choose Team #2</span></a></dt>
+    <dt><a href="#"><span></span></a></dt>
     <dd><ul></ul></dd>
 </dl>
 </div>
-    
+<div class="legend"></div>
 <div id='branding'>
-    <a href='http://uky.edu/' title='University of Kentucky' target='_blank'><img src='img/uk-logo.png' alt='University of Kentucky Logo' /></a> <br>
     <a href='http://newmapsplus.uky.edu/' title='Check us out and learn how to make a map like this!' target='_blank'><img src='img/nmp.png' alt='New Maps Plus' /></a>
+    <a href='http://uky.edu/' title='University of Kentucky' target='_blank'><img src='img/uk-logo.png' alt='University of Kentucky Logo' /></a>
 </div>
 <div class='stats'></div>  
 <div id='cover'></div>
@@ -56,6 +46,7 @@
     <p>While this is a terrible practice in most web design cases, we also believe that some interactive thematic maps don't really belong on smaller phones and handheld devices.</p>
 </div>
 
+<script src='js/colors.js'></script>
 <script src='js/map.js'></script>
 </body>
 

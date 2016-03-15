@@ -56,13 +56,18 @@ var team1Att = 'Kentucky',
     stats = $(".stats"),
     breaks = [2.5,1.25,.8,.4],
     breakColors = ['#005dab','#3182bd','#6baed6','#bdd7e7','#eff3ff'],
+    breakOpacities = [1, .7, .5, .3, .1],
     sumData;
 
+function calculateBreakColors(colorIn) {
+    
+    
+}
 
 d3.queue()
     .defer(d3.json, 'data/hexgrid.json')
     .defer(d3.csv, 'data/hex-dt.csv')
-    .defer(d3.csv, 'data/key-count-all.csv')
+    .defer(d3.csv, 'data/key.csv')
     .defer(d3.json, 'data/states.json')
     .defer(d3.json, 'data/land.json')
     .await(processData);
@@ -79,8 +84,8 @@ function processData(e,hex,data,keys,states,land) {
         } 
         
         for(var k = 0; k < keys.length; k++) {
-            var original = keys[k]['original '],
-                schoolName = keys[k]['School Name'];
+            var original = keys[k]['ID'],
+                schoolName = keys[k]['SCHOOL'];
             
             hex.features[i].properties.tweets[schoolName] = Number(hex.features[i].properties.tweets[original]);
             
@@ -91,6 +96,7 @@ function processData(e,hex,data,keys,states,land) {
         
         }
     }
+    
     playBall(hex, states, land);
     
 }
@@ -134,7 +140,7 @@ function playBall(hex, states, land) {
     // then loop through data and aggregate totals for each property
     hex.features.forEach(function(f) {
        for(var p in f.properties.tweets) {
-           if(p != 'total' && p != 'hex' && p != 'random') {
+           if(p != 'hex' && p != 'random') {
                sumData[p]+=f.properties.tweets[p]
            }
        }   
@@ -153,15 +159,6 @@ function playBall(hex, states, land) {
                 fillOpacity: 1
 
             }
-        },
-        filter: function(feature) {
-            
-              // filter out the polygons with no data
-              for(var prop in feature.properties){
-                  if(Number(feature.properties[prop].total) > 0) {
-                    return feature;   
-                  }
-              }         
         },
         onEachFeature: function(feature,layer){
             // for each hex, determine the top 10 teams tweeted
@@ -249,7 +246,8 @@ function updateMap() {
             layer.setStyle({
                 fill: true,
                 stroke: true,
-                fillColor: getColor(val)
+                fillColor: colors[team1Att],
+                fillOpacity: getOpacity(val)
             });   
         } else {
             // don't display the ones with no data for this attribute
@@ -285,10 +283,31 @@ function getColor(val){
     } 
 }
 
+
+function getOpacity(val){
+    
+    // determine if normalizd by tweet pop or other beer
+    if(team2Att == 'rn0to10000'){
+        normalized = 'norm';
+    } else {
+        normalized = 'compare';
+    }
+    // loop through the appropriate break values, high to low
+    for (var i=0; i < breaks.length; i++) {
+        if(val >= breaks[i]){
+            return breakOpacities[i];
+        }
+        // add final color to the lowest value (or any values below it)
+        if(val < breaks[breaks.length-1]){
+             return breakColors[breakOpacities.length - 1]; 
+        }
+    } 
+}
+
 function buildUI(vars) {
   
-    $("h2 span:first-child").text(team1Att).css('color',breakColors[0]);
-    $("h2 span:last-child").text(team2Att).css('color',breakColors[4]);
+//    $("h2 span:first-child").text(team1Att).css('color',colors[team1Att]);
+//    $("h2 span:last-child").text(team2Att).css('color',colors[team2Att]);
     
     var team1 = $('.team-1 ul').append('<li><a href="#">Kentucky<span class="value">Kentucky</span></a></li>');
     var team2 = $('.team-2 ul').append('<li><a href="#">Duke<span class="value">Duke</span></a></li>');
@@ -307,6 +326,8 @@ function buildUI(vars) {
         $(".team-1 dd ul").toggle();
     });
     
+    $(".team-1 dt a span").html(team1Att).css('color',colors[team1Att]);
+    $(".team-2 dt a span").html(team2Att).css({'color': 'white', 'text-shadow' : getTextShadow()});
 
     $(".team-1 dd ul li a").click(function() {
         var text = $(this).html();
@@ -314,7 +335,7 @@ function buildUI(vars) {
         $(".dropdown dd ul").hide();
         team1Att = getSelectedValue('team-1');
         updateMap();
-        $("h2 span:first-child").text(team1Att).css('color',breakColors[0]);
+        $(".team-1 dt a span").html(team1Att).css('color',colors[team1Att]);
     });
     
     $(".team-2 dt a").click(function(e) {
@@ -327,7 +348,7 @@ function buildUI(vars) {
         $(".dropdown dd ul").hide();
         team2Att = getSelectedValue('team-2');
         updateMap();
-        $("h2 span:last-child").text(team2Att).css('color',breakColors[4]);
+        $(".team-2 dt a span").html(team2Att).css({'color': 'white', 'text-shadow' : getTextShadow()});
     });
 
 
@@ -382,12 +403,12 @@ function buildUI(vars) {
 function drawLegend() {
 
     // create a legend control and add to bottom right
-    var legend = L.control({position: 'bottomright'});
-    legend.onAdd = function(map) {
-        var div = L.DomUtil.create('div', 'legend');
-        return div;
-    };
-    legend.addTo(map);
+//    var legend = L.control({position: 'bottomright'});
+//    legend.onAdd = function(map) {
+//        var div = L.DomUtil.create('div', 'legend');
+//        return div;
+//    };
+//    legend.addTo(map);
     updateLegend();
     
     // sexy fadeIn
@@ -395,18 +416,23 @@ function drawLegend() {
 
 }
 
+function getTextShadow() {
+    return '2px 2px ' + colors[team2Att];
+}
+
 function updateLegend(){
     
     // populate legend with currently selected beer (and normalized beer if comparing)
     
-    var team1AttColor = breakColors[0],
-        team2AttColor = breakColors[4];
+    var team1AttColor = colors[team1Att],
+        team2AttColor = getTextShadow();
     
-    $('.legend').html('<h3><span style="color:'+team1AttColor+' ">'+team1Att+'</span><span style="color:'+team2AttColor+'">'+team2Att+'</span></h3><ul>');
+    $('.legend').html('<h3><span style="color:'+team1AttColor+' ">'+team1Att+'</span><span style="color:white;text-shadow:'+team2AttColor+'">'+team2Att+'</span></h3><ul>');
   
 
     for(var i=0; i<=breakColors.length-1;i++){
-        $('.legend ul').append('<li><span style="background: '+breakColors[i]+'"></span></li>');
+//        $('.legend ul').append('<li><span style="background: '+breakColors[i]+'"></span></li>');
+         $('.legend ul').append('<li><span style="background: '+colors[team1Att]+';opacity:'+breakOpacities[i]+'"></span></li>');
     }
 
     $('.legend ul').append('</ul>');

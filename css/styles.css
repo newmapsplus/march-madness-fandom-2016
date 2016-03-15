@@ -202,7 +202,6 @@ p {
 }
 #ui-controls dl {
     display: inline-block;
-    font-size: 3em;
     margin: 10px;
 }
 .dropdown dd, .dropdown dt, .dropdown ul { 
@@ -231,6 +230,7 @@ p {
     padding-right: 40px;
 /*    border:1px solid #d1701a; */
 /*    width:150px;*/
+    font-size: 3em;
 }
 .dropdown dt a span {
     cursor:pointer; 
@@ -257,6 +257,7 @@ p {
 .dropdown dd ul li a { 
     padding:5px; 
     display:block;
+    font-size: 2em;
 }
 .dropdown dd ul li a:hover { 
     background-color:#005dab;
@@ -267,6 +268,13 @@ p {
 .legend {
     display: none;   /* initially hide for fadeIn */
     display: inline-block;
+    position: absolute;
+    left: 35%;
+    bottom: 0;
+    z-index: 200;
+    background: #adadad;
+    padding: 15px 15px;
+    border: 1px #adadad solid;
 }
 .legend, .stats {
     font-family: 'octin_sportsregular', serif;
@@ -296,19 +304,20 @@ p {
     color: #020203;
 }
 .legend h3 {
-    font-size: 1.6em;
+    font-size: 1.4em;
     font-weight: 400;
     margin: 0;
 }
 .legend h3 span:first-child {
     position: absolute;
-    left: 0;
-    top: -10px;
+    left: 2px;
+    top: 2px;
 }
 .legend h3 span:last-child {
     position: absolute;
-    right: 0px;
-    top: -10px;
+    right: 2px;
+    top: 2px;
+    text-shadow: 2px 2px #005dab;
 }
 .legend ul {
     padding: 0;
@@ -327,12 +336,19 @@ p {
 
 #branding {
     position: absolute;
-    left: 10px;
-    bottom: 10px;
+    left: 0;
+    width: 100%;
+    bottom: 120px;
     z-index: 200;
 }
 #branding a {
-  margin-bottom: 20px;
+    position: absolute;
+}
+#branding a:first-child {
+    left: 20px;
+}
+#branding a:last-child {
+    right: 20px;
 }
 #sheep {
     opacity: .6;
