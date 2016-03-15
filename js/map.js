@@ -26,7 +26,6 @@ switch (true) {
         zoomLevel = 3;
         break;
 }
-console.log(zoomLevel);
 // create initial map object and use CartoDB's projection to reproject
 var map = L.map('map', {
     center: [40,-95],
@@ -56,7 +55,8 @@ var team1Att = 'Kentucky',
     stats = $(".stats"),
     breaks = [2.5,1.25,.8,.4],
     breakColors = ['#005daa','#1f80d1','#f1f1ca','#ea964c','#d1701a'],
-    sumData;
+    sumData,
+    tagKey = {};
 
 function calculateBreakColors(colorIn) {
     
@@ -72,7 +72,7 @@ d3.queue()
     .await(processData);
 
 function processData(e,hex,data,keys,states,land) {
-    
+   
     for(var i = 0; i < hex.features.length; i++){
         var hexId = hex.features[i].properties.hex;
         hex.features[i].properties.tweets = {};
@@ -85,6 +85,8 @@ function processData(e,hex,data,keys,states,land) {
         for(var k = 0; k < keys.length; k++) {
             var original = keys[k]['ID'],
                 schoolName = keys[k]['SCHOOL'];
+            
+            tagKey[schoolName] = keys[k]['Search'];
             
             hex.features[i].properties.tweets[schoolName] = Number(hex.features[i].properties.tweets[original]);
             
@@ -258,8 +260,16 @@ function updateMap() {
     });
 
     updateLegend();
+    updateTags();
 
 } 
+
+function updateTags() {
+    
+    var team1List = $('#team-1tags').html(tagKey[team1Att]);
+    var team2List = $('#team-2tags').html(tagKey[team2Att]);
+    
+}
 
 function getColor(val){
     
