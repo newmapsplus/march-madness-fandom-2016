@@ -32,7 +32,7 @@ body {
 }
 header {
     background: #f5f5f5;
-    height: 80px;
+    height: 130px;
     width: 100%;
     position: absolute;
     z-index: 200;
@@ -40,19 +40,13 @@ header {
 }
 h1 {
     font-family: 'sf_sports_nightregular', Graduate, serif;
-    position: absolute;
     z-index: 200;
     color: #005daa;
-    font-size: 2em;
-    top: 100px;
-    margin: 0;
+    font-size: 2.4em;
+    margin: 0 auto;
     padding: 6px 15px;
-    left: 10px;
-    display: inline-block;
     line-height: 1.2em;
-    max-width: 40%;
     text-align: center;
-    left: 33%
 }
 h1 span {
     text-shadow: 2px 2px 0 #f5f5f5, 5px 5px 0 #d1701a;
@@ -89,7 +83,7 @@ h2 {
     border-radius: 4px;
     transition: background-color 0.5s ease;
     transition: color 0.5s ease;
-    display: none;
+  
 }
 #huh:hover {
    background-color:rgba(255,255,255,0.8); 
@@ -169,7 +163,7 @@ p {
 }
 #ui-controls {
     position: absolute;
-    top: 0;
+    top: 50px;
     left: 0;
     width: 100%;
     z-index: 200;
@@ -187,6 +181,12 @@ p {
     left: 20px;
     
 }
+.team-1 dt a span {
+    color: #005daa;
+}
+.team-1 dt a span:hover {
+    color: whitesmoke;
+}
 .team-2 {
     position: absolute;
     right: 20px
@@ -202,20 +202,37 @@ p {
 .dropdown dd { 
     position:relative; 
 }
-.dropdown a, .dropdown a:visited { 
+.team-1 a, .dropdown a:visited { 
+    color:#005daa; 
+    text-decoration:none; 
+    outline:none;
+}
+.team-2 a, .dropdown a:visited { 
     color:#d1701a; 
     text-decoration:none; 
     outline:none;
+    text-align: right;
 }
 .dropdown a:hover { 
     color: whitesmoke;
 }
-.dropdown dt a:hover { 
+.team-1 dt a:hover { 
     color: whitesmoke; 
-    background-color:#005dab;
-    border: 1px solid #d1701a;
+    background-color:#005daa;
+    border: 2px solid #005daa;
 }
-.dropdown dt a {
+.team-2 dt a:hover { 
+    color: whitesmoke; 
+    background-color:#d1701a;
+    border: 2px solid #d1701a;
+}
+.team-1 dt a {
+    background: whitesmoke url(../img/arrow.png) no-repeat scroll right center; 
+    display:block; 
+    padding-right: 40px;
+    font-size: 3em;
+}
+.team-2 dt a {
     background: whitesmoke url(../img/arrow2.png) no-repeat scroll right center; 
     display:block; 
     padding-right: 40px;
@@ -240,6 +257,9 @@ p {
     min-width:170px; 
     list-style:none;
 }
+.team-2 dd ul {
+    left: -160px
+}
 .dropdown span.value { 
     display:none;
 }
@@ -249,7 +269,7 @@ p {
     font-size: 2em;
 }
 .dropdown dd ul li a:hover { 
-    background-color:#005dab;
+    background-color:#005daa;
 }
 
 
@@ -259,7 +279,7 @@ p {
     display: inline-block;
     position: absolute;
     left: 35%;
-    bottom: 0;
+    bottom: -25px;
     z-index: 200;
     background: whitesmoke;
     padding: 15px 25px;
@@ -278,7 +298,7 @@ p {
     background: rgba(244, 244, 244, .8);
     border: 2px #d1701a solid;
     border-radius: 5px;
-    color: #005dab;
+    color: #005daa;
     padding: 6px 10px;
 }
 .stats h3 {

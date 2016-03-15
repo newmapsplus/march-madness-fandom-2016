@@ -11,19 +11,19 @@ var w = window.innerWidth,
 
 switch (true) {
     case (w >= 1366):
-        zoomLevel = 5.1;
-        break;
-    case (w >= 1280):
         zoomLevel = 4.9;
         break;
-    case (w >= 1024):
+    case (w >= 1280):
         zoomLevel = 4.6;
         break;
+    case (w >= 1024):
+        zoomLevel = 4.4;
+        break;
     case (w >= 736):
-        zoomLevel = 4.2;
+        zoomLevel = 4;
         break;
     default:
-        zoomLevel = 4;
+        zoomLevel = 3;
         break;
 }
 console.log(zoomLevel);
@@ -284,8 +284,8 @@ function getColor(val){
 
 function buildUI(vars) {
     
-    var team1 = $('.team-1 ul').append('<li><a href="#">Kentucky<span class="value">Kentucky</span></a></li>');
-    var team2 = $('.team-2 ul').append('<li><a href="#">Duke<span class="value">Duke</span></a></li>');
+    var team1 = $('.team-1 ul');
+    var team2 = $('.team-2 ul');
     
     vars.forEach(function(v) {
         if(v != 'random' && v != 'hex' && v != 'total') {
@@ -301,8 +301,8 @@ function buildUI(vars) {
         $(".team-1 dd ul").toggle();
     });
     
-    $(".team-1 dt a span").html(team1Att).css('color',breakColors[0]);
-    $(".team-2 dt a span").html(team2Att).css('color',breakColors[4]);
+    $(".team-1 dt a span").html(team1Att);
+    $(".team-2 dt a span").html(team2Att);
 
     $(".team-1 dd ul li a").click(function() {
         var text = $(this).html();
