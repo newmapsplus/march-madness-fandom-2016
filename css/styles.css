@@ -278,21 +278,24 @@ p {
 
 #team-1tags, #team-2tags {
     position: absolute;
-    top: 160px;
+    top: 150px;
     z-index: 300;
     font-family: "Helvetica Nueve", Helvetica, sans-serif;
     max-width: 180px;
     background: rgba(244, 244, 244, .8);
-    border: 2px #d1701a solid;
     border-radius: 5px;
-    color: #005daa;
     padding: 6px 10px;
+    display: none;
 }
 #team-1tags {
     left: 30px;
+    border: 2px #005daa solid;
+    color: #005daa;
 }
 #team-2tags {
     right: 30px;
+    border: 2px #d1701a solid;
+    color: #d1701a;
 }
 
 /* LEGEND */
@@ -323,17 +326,17 @@ p {
     border: 2px #d1701a solid;
     border-radius: 5px;
     color: #005daa;
-    padding: 6px 10px;
+    padding: 6px 18px;
 }
 .stats h3 {
     padding: 0;
-    margin: 10px 0 0;
+    margin: 6px 0 0;
     position: relative;
 }
 .stats ul {
     list-style-type: none;
     padding: 0;
-    margin: 5px 0 0 0;
+    margin: 5px 0 10px 0;
     color: #020203;
 }
 .legend h3 {
