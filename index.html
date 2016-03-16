@@ -47,6 +47,28 @@
 </div>
 </footer>
 <div class='stats'></div>  
+<a href='#' id='huh'>about this map</a>
+<div id='about'>
+<h3>About This Map</h3>
+        <div>
+            <p>This map is a <a href='http://newmapsplus.uky.edu/' target='_blank'>New Maps Plus</a> project. Use the dropdown menus at top, left and right to explore the relative frequency of March Madness teams' fans tweeting.</p>
+            <p>More saturated (darker) colors indicate a higher probability of tweets containing the text of the selected team. Hexagons without a significant number of observations/tweets do not show up. That's why some teams have more coverage than others.</p>
+            <p>Utilizing the <a href='http://leafletjs.com/' target='_blank'>Leaflet library</a>, the map aggregates point-level data into hexbin polygon units to show the spatial distribution of the tweets related to specific teams. The comparisons of two teams uses a 5-class divergent color scheme. The map is also projected into an Albers equal-area projection (with the help of <a href='https://github.com/cartodb/cartodb.proj' target='_blank'>CartoDB's cardodb.proj extension</a>).</p>
+            <h4>Data Collection and Cultivation</h4>
+            <p>Data for this map was pulled from the <a href='http://www.floatingsheep.org/p/dolly.html' target='_blank'>Dolly project</a>. Scripts in R and Node.js further processed and aggregated totals into hexbin polygons, and encoded the results as GeoJSON, which were then loaded into the map client-side at runtime.</p>
+  
+        </div>
+        <h4>Authors</h4>
+        <ul>
+            <li><a href='https://twitter.com/rgdonohue' target='_blank'>Rich Donohue</a> (map and UI design and development)</li>
+            <li><a href='https://github.com/atepoorthuis' target='_blank'>Ate Poortuis</a> (data wrangling)</li>
+            <li><a href='http://newmapsplus.uky.edu/directors-welcome' target='_blank'>Matthew Zook</a> (creative direction and data preparation)</li>            
+        </ul>
+        <p>Special thanks for their input and feedback: <a href='https://twitter.com/kyjts'>Taylor Shelton</a>, <a href='https://twitter.com/awoodruff'>Andy Woodruff</a>, and <a href='https://twitter.com/vancematthews'>Sam Matthews</a>.</p>
+        <h4>Data Sources</h4>
+        <p>The <a href='https://dev.twitter.com/streaming/overview'>Twitter API</a></p>
+        <p>The code for this project is licensed under a <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'>Creative Commons Attribution-Noncommercial-Share Alike 3.0 Unsupported License</a> and hosted as a <a href='https://github.com/newmapsplus/march-madness-fandom-2016' target='_blank'>New Maps Plus GitHub repository.</a></p>  
+</div>
 <div id='cover'></div>
 <div id='mobile-apology'>
     <p>We apologize, but this thematic web map is best experienced on a tablet or PC.</p>
